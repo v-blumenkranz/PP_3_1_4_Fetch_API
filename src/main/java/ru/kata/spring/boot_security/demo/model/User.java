@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,7 +17,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private long id;
 
     @Column(name = "first_name")
     private String firstName;
@@ -47,7 +46,7 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(Long id, String firstName, String lastName, int age, String email, String password, List<Role> roles) {
+    public User(long id, String firstName, String lastName, Integer age, String email, String password, List<Role> roles) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -57,11 +56,11 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -85,7 +84,7 @@ public class User implements UserDetails {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 

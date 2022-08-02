@@ -11,7 +11,7 @@ import java.util.Objects;
 public class Role implements GrantedAuthority {
 
     @Id
-    private Long id;
+    private long id;
 
     private String role;
 
@@ -21,11 +21,11 @@ public class Role implements GrantedAuthority {
         this.role = role;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

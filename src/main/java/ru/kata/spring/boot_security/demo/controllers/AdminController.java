@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,13 +24,31 @@ public class AdminController {
     @GetMapping
     public String adminHomePage(Model model) {
         model.addAttribute("allUsers", userServiceImpl.findAllUsers());
+        model.addAttribute("allRoles", roleServiceImpl.getAllRolesFromDatabase());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = user.getId();
+        user = userServiceImpl.getUserById(userId);
+        model.addAttribute("currentUser", user);
         return "admin/home";
+    }
+
+    @GetMapping("/user-page")
+    public String adminUserPage(Model model) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = user.getId();
+        user = userServiceImpl.getUserById(userId);
+        model.addAttribute("currentUser", user);
+        return "admin/user-page";
     }
 
     @GetMapping("/new")
     public String newUser(Model model) {
         model.addAttribute("user", new User());
         model.addAttribute("roles", roleServiceImpl.getAllRolesFromDatabase());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = user.getId();
+        user = userServiceImpl.getUserById(userId);
+        model.addAttribute("currentUser", user);
         return "admin/new";
     }
 

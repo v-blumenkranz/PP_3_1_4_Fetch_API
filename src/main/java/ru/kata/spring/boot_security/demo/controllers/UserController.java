@@ -30,7 +30,7 @@ public class UserController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = user.getId();
         user = userServiceImpl.getUserById(userId);
-        model.addAttribute("user", user);
-        return "user.html";
+        model.addAttribute("currentUser", user);
+        return "user/user";
     }
 }
