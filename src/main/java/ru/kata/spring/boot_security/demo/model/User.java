@@ -1,17 +1,20 @@
 package ru.kata.spring.boot_security.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-
 
 @Component
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
@@ -42,11 +45,10 @@ public class User implements UserDetails {
             )
     private List<Role> roles;
 
-
     public User() {
     }
 
-    public User(long id, String firstName, String lastName, Integer age, String email, String password, List<Role> roles) {
+    public User(long id, String firstName, String lastName, Integer age, String email, String password, List<Role> roles, Set<? extends SimpleGrantedAuthority> authorities) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -108,13 +110,8 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    @Override
-    public Set<? extends SimpleGrantedAuthority> getAuthorities() {
-        Set<SimpleGrantedAuthority> authorities =
-            getRoles().stream()
-                    .map(role -> new SimpleGrantedAuthority(role.getAuthority()))
-                    .collect(Collectors.toSet());
-        return authorities;
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles();
     }
 
     @Override

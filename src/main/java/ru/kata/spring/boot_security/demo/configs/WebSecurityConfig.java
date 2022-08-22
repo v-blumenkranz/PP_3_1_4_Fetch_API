@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 import ru.kata.spring.boot_security.demo.services.CustomUserDetailsService;
 
 
@@ -31,10 +32,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeRequests()
+//                .antMatchers("/users/**", "/roles/**", "/admin/**", "/user/**").permitAll();
+
                 .antMatchers("/", "/login").permitAll()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/user").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/users/**").hasRole("ADMIN")
+                .antMatchers("/auth").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().successHandler(successUserHandler)
@@ -45,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .clearAuthentication(true)
                     .invalidateHttpSession(true)
                     .deleteCookies("JSESSIONID")
-                    .logoutSuccessUrl("/")
+                    .logoutSuccessUrl("/login")
                 .permitAll();
     }
 
@@ -62,4 +66,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
     }
+
 }
