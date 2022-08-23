@@ -2,7 +2,7 @@ package ru.kata.spring.boot_security.demo.rest;
 
 
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
@@ -16,9 +16,11 @@ import java.util.List;
 public class AdminRestController {
 
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
-    public AdminRestController(UserService userService) {
+    public AdminRestController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping
@@ -43,18 +45,22 @@ public class AdminRestController {
 
     @ResponseBody
     @PostMapping
-    public void addNewUser(@RequestBody User user) {
+    public User addNewUser(@RequestBody User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.saveUser(user);
+        return user;
     }
 
     @PutMapping
     @ResponseBody
-    public void updateUser(@RequestBody User user) {
+    public List<User> updateUser(@RequestBody User user) {
         userService.updateUser(user);
+        return userService.findAllUsers();
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable("id") Long id) {
+    public List<User> deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
+        return userService.findAllUsers();
     }
 }
