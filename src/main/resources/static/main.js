@@ -1,4 +1,4 @@
-const usersUrl = 'http://localhost:8080/users'
+const usersUrl = 'http://localhost:8080/api/admin'
 const tableBody = document.querySelector('#adminTableBody')
 
 //Переменная для создания нового пользователя
@@ -104,7 +104,7 @@ newUserFormElement.addEventListener('submit', evt => {
         roles: userRoles
     }
 
-    fetch('http://localhost:8080/users', {
+    fetch(usersUrl, {
         method: 'POST',
         body: JSON.stringify(user),
         headers: {
@@ -169,7 +169,7 @@ async function deleteButtonClicked(deleteButton, userID) {
 }
 
 async function fillDeleteModal(userID) {
-    fetch(`http://localhost:8080/users/${userID}`).then(response => response.json())
+    fetch(`http://localhost:8080/api/admin/${userID}`).then(response => response.json())
         .then(user => {
             document.querySelector('#deleteId').value = user.id
             document.querySelector('#deleteFirstName').value = user.firstName
@@ -197,7 +197,7 @@ async function fillDeleteModal(userID) {
 function innerDeleteButtonClicked(button, userID) {
     button.addEventListener('click', evt => {
         evt.preventDefault()
-        fetch(`http://localhost:8080/users/${userID}`, {
+        fetch(`http://localhost:8080/api/admin/${userID}`, {
             method: 'DELETE'
         }).then(response =>
             response.json()
@@ -228,7 +228,7 @@ async function editButtonClicked(editButton, userID) {
 
 async function fillEditModal(userID) {
 
-    fetch(`http://localhost:8080/users/${userID}`)
+    fetch(`http://localhost:8080/api/admin/${userID}`)
         .then(response => response.json())
         .then(user => {
             document.querySelector('#id').value = user.id
@@ -282,7 +282,7 @@ function saveButtonClicked(button) {
             roles: editedUserRoles
         }
 
-        fetch('http://localhost:8080/users', {
+        fetch(usersUrl, {
             method: 'PUT',
             body: JSON.stringify(editedUser),
             headers: {

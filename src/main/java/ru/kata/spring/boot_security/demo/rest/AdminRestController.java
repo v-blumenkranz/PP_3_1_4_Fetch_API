@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/users")
+@RequestMapping("/api/admin")
 public class AdminRestController {
 
     private final UserService userService;
@@ -24,26 +24,23 @@ public class AdminRestController {
     }
 
     @GetMapping
-    @ResponseBody
     public List<User> getAllUsers() {
         return userService.findAllUsers();
     }
 
+
     @GetMapping("/{id}")
-    @ResponseBody
     public User getUserById(@PathVariable("id") Long id) {
         return userService.getUserById(id);
     }
 
     @GetMapping("/auth")
-    @ResponseBody
     public User getAuthenticatedUser() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userID = user.getId();
         return userService.getUserById(userID);
     }
 
-    @ResponseBody
     @PostMapping
     public User addNewUser(@RequestBody User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -52,7 +49,6 @@ public class AdminRestController {
     }
 
     @PutMapping
-    @ResponseBody
     public List<User> updateUser(@RequestBody User user) {
         userService.updateUser(user);
         return userService.findAllUsers();

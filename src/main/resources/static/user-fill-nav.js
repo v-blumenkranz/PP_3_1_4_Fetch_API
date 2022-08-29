@@ -1,4 +1,4 @@
-const principalInformationURL = 'http://localhost:8080/users/auth'
+const principalInformationURL = 'http://localhost:8080/api/user'
 const userTableBody = document.querySelector('#userTableBody')
 const usernameSpan = document.querySelector('#username-span')
 const rolesSpan = document.querySelector('#roles-span')
@@ -29,4 +29,3 @@ fetch(principalInformationURL).then(response => response.json())
 
         usernameSpan.innerText = user['email']
     })
-
